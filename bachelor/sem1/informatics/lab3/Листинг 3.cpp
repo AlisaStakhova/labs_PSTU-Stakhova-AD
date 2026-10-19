@@ -1,47 +1,40 @@
-#include <print>
-#include <cmath>
+#include <iostream> #include <iomanip> #include <cmath>
 using namespace std;
-
-long fac(int n)
+// Вычисление суммы ряда для заданного количества членов double n_sum(double x) { int n = 40; double s = 0;
+for (int i = 0; i < n; i++)
 {
-    if(n == 0) return 1;
-    if(n == 1) return 1;
-    return n * fac(n - 1);
+    s += pow(-1, i) * pow(x, 2 * i + 1) / (2 * i + 1);
 }
 
-double n_sum(double x)
+return s;
+}
+// Вычисление суммы ряда с заданной точностью double epsilon_sum(double x) { double epsilon = 0.0001; double s = 0; double a = x; int i = 0;
+while (abs(a) >= epsilon)
 {
-    int n{10};
-    double ln3{log(3)};
-    int i{1};
-    double s{1};
-    for(i; i <= n; i++)
+    a = pow(-1, i) * pow(x, 2 * i + 1) / (2 * i + 1);
+
+    if (abs(a) < epsilon)
     {
-        s += (pow(ln3 * x, i) / fac(i));
+        break;
     }
-    return s;
+
+    s += a;
+    i++;
 }
 
-double epsilon_sum(double x)
-{   
-    double epsilon{0.0001};
-    double ln3{log(3)};
-    int i{1};
-    double s{1};
-    double a{1};
-    for(i; a >= epsilon; i++)
-    {
-        a = (pow(ln3 * x, i) / fac(i));
-        s += a;
-    }
-    return s;
+return s;
+}
+int main() { double step = (1.0 - 0.1) / 10.0;
+cout << fixed << setprecision(6);
+
+for (double x = 0.1; x <= 1.000001; x += step)
+{
+    cout << "X = " << x
+         << "  SN = " << n_sum(x)
+         << "  SE = " << epsilon_sum(x)
+         << "  Y = " << atan(x)
+         << endl;
 }
 
-int main()
-{
-    float step{(1 - 0.1) / 10};
-    for(float x{0.1}; x <= 1.01; x += step)
-    {
-        println("X = {0:.2f} SN = {1:.6f} SE = {2:.6f} Y = {3:.6f}", x, n_sum(x), epsilon_sum(x), pow(3, x));
-    }
+return 0;
 }
